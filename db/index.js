@@ -4,7 +4,8 @@ const db = new Sequelize(process.env.DATABASE_URL);
 const User = db.define("user", {
   username: Sequelize.STRING,
   password: Sequelize.STRING,
-  settings: Sequelize.JSON
+  settings: Sequelize.JSON,
+  credits: Sequelize.INTEGER
 });
 
 const Image = db.define("image", {
@@ -85,6 +86,7 @@ const sync = () => {
 //       });
 //     });
 // };
+
 
 module.exports = {
   sync,
