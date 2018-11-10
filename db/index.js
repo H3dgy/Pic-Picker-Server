@@ -15,7 +15,7 @@ const Image = db.define("image", {
 });
 
 const View = db.define("view", {
-  userId: Sequelize.UUID,
+  userId: Sequelize.INTEGER,
   username: Sequelize.STRING,
   userAge: Sequelize.INTEGER,
   userGender: Sequelize.STRING

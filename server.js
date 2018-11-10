@@ -9,15 +9,6 @@ const { testImages, testUsers } = require("./testObjects");
 
 const port = 3000;
 
-// const _seedImages = () => {
-//   Promise.all(
-//     testImages.map(image => {
-//       return imageModule.imageUpload(image.userId, image.uri);
-//     })
-//   );
-// };
-
-
 
 const seedUserCallback = async (req,res,next) => {
   await Promise.all(testUsers.map(user => {
@@ -29,47 +20,15 @@ const seedUserCallback = async (req,res,next) => {
 
 app.get('/SeedUsers', seedUserCallback);
 
-const IncrementCallback = async (req,res,next) => {
-  await userModule.incrementCredit(2);
-  await userModule.incrementCredit(2);
-  await userModule.incrementCredit(3);
-  await userModule.decrementCredit(2);
-  const result = await userModule.findAll();
+const seedPicturesCallBack = async (req,res,next) => {
+  await Promise.all(testImages.map(image => {
+    return imageModule.imageUpload(image.userId,image.uri)
+  }))
+  const result = await imageModule.findAll();
   res.send(result);
 }
 
-app.get('/Increment', IncrementCallback);
-
-const findByIdCallback = async (req,res,next) => {
-  
-  const result = await userModule.findUserById(2);
-  res.send(result);
-}
-
-
-app.get('/UserByID', findByIdCallback);
-
-const findByNameCallback = async (req,res,next) => {
-  const result = await userModule.findUserByUsername("Fred");
-  res.send(result);
-}
-app.get('/UserByName', findByNameCallback);
-
-const updateByIdCallback = async (req,res,next) => {
-  const update = {
-    settings: {
-      gender: "both",
-      age: 80,
-      feedbackGender: { male: true, female: true },
-      feedbackAge: [true, false, true, false]
-    }
-  } 
-  await userModule.update(2,update);
-  const feedback = await userModule.findUserById(2);
-  res.send(feedback);
-}
-app.get('/Update', updateByIdCallback);
-
+app.get('/SeedImages', seedPicturesCallBack);
 
 (async () => {
   try {
@@ -80,6 +39,27 @@ app.get('/Update', updateByIdCallback);
     console.log(error);
   }
 })();
+
+const imageStreamCallBack = async (req,res,next) => {
+  const date = Date.parse("2018-11-10T11:45:45.491Z");
+  const result = await imageModule.imageStream(1, date, 1);
+  console.log(result);
+  res.send(result);
+}
+
+app.get('/Imagestream', imageStreamCallBack);
+
+const incrementImageCallBack = async (req,res,next) => {
+  await imageModule.incrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
+  await imageModule.incrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
+  await imageModule.decrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
+  const result = await imageModule.findImage('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
+  console.log(result);
+  res.send(result);
+}
+
+app.get('/incrementImage', incrementImageCallBack);
+
 
 _seedUsers = () => {
   return 

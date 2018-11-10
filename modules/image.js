@@ -9,6 +9,7 @@ const View = db.models.View;
 
 // Upload an image for a user
 // Returns a promise
+// works
 const imageUpload = (userId, uri) => {
   return Image.create({
     uri: uri,
@@ -29,23 +30,19 @@ const imageStream = (userId, lastDate, priority) => {
         [Op.gt]: lastDate
       },
       priority: priority,
-      include: [
-        {
-          model: View,
-          where: {
-            [Op.not]: {
-              userId: userId
-            }
-          }
-        }
-      ]
-    }
+    }, 
+    include: [ {
+      model: View,
+      where: {
+          userId: userId
+      }
+    } ]
   });
 };
 
 // Find all images from user 
 // returns promise
-
+// Works
 const userImages = (userId) => {
   return Image.findAll({
     where: {
@@ -54,15 +51,41 @@ const userImages = (userId) => {
   })
 }
 
-// find image returns promise
+// Find images and return view
+// Works
+const viewImages = () => {
+  return Image.findAll({
+    include: [ View ]
+  });
+}
 
+// find image returns promise
+// Works
 const findImage = uri => {
   return Image.findOne({ where: { uri: uri } });
 };
+
+// Find all images
+// Works
+const findAll = () => {
+  return Image.findAll();
+}
+
+const incrementPriority = (uri) => {
+  return Image.increment('priority', {where: {uri: uri}})
+}
+
+const decrementPriority = (uri) => {
+  return Image.decrement('priority', {where: {uri: uri}})
+}
 
 module.exports = {
   imageUpload,
   findImage,
   imageStream,
-  userImages
+  userImages,
+  findAll,
+  viewImages,
+  incrementPriority,
+  decrementPriority
 };
