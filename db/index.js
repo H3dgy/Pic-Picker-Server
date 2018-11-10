@@ -26,6 +26,7 @@ const View = db.define("view", {
 Image.belongsTo(User);
 User.hasMany(Image);
 Image.hasMany(View);
+View.belongsTo(Image);
 
 // promise
 let _conn;

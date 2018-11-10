@@ -22,6 +22,7 @@ const imageUpload = (userId, uri) => {
 // lastDate specifies which the last update picture is that he has seen to not see same picture twice
 // ensure lastDate is the right date object
 // Higher up the lastDate needs to be send to the client of the new object
+// Works
 
 const imageStream = (userId, lastDate, priority) => {
   return Image.findAll({
@@ -30,11 +31,16 @@ const imageStream = (userId, lastDate, priority) => {
         [Op.gt]: lastDate
       },
       priority: priority,
+      userId: {
+        [Op.not]: userId
+      }
     }, 
     include: [ {
       model: View,
       where: {
-          userId: userId
+          userId:{
+          [Op.not]: userId
+          } 
       }
     } ]
   });

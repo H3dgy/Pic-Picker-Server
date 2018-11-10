@@ -3,6 +3,7 @@ const db = require("./db");
 const app = express();
 const userModule = require("./modules/user");
 const imageModule = require("./modules/image");
+const viewModule = require("./modules/view")
 const { testImages, testUsers } = require("./testObjects");
 
 // Sequelize models
@@ -42,7 +43,7 @@ app.get('/SeedImages', seedPicturesCallBack);
 
 const imageStreamCallBack = async (req,res,next) => {
   const date = Date.parse("2018-11-10T11:45:45.491Z");
-  const result = await imageModule.imageStream(1, date, 1);
+  const result = await imageModule.imageStream(2, date, 1);
   console.log(result);
   res.send(result);
 }
@@ -59,6 +60,14 @@ const incrementImageCallBack = async (req,res,next) => {
 }
 
 app.get('/incrementImage', incrementImageCallBack);
+
+const _addView = async (req,res,next) => {
+  await viewModule.addView(1,"luke",60,50,1);
+  const result = await imageModule.viewImages();
+  res.send(result);
+}
+
+app.get('/addView', _addView);
 
 
 _seedUsers = () => {
