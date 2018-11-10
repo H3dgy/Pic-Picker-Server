@@ -71,10 +71,13 @@ const findAll = () => {
   return Image.findAll();
 }
 
+// Increment / decrement priority
+// Works
 const incrementPriority = (uri) => {
   return Image.increment('priority', {where: {uri: uri}})
 }
 
+// Works
 const decrementPriority = (uri) => {
   return Image.decrement('priority', {where: {uri: uri}})
 }

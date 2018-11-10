@@ -5,7 +5,8 @@ const User = db.define("user", {
   username: Sequelize.STRING,
   password: Sequelize.STRING,
   settings: Sequelize.JSON,
-  credits: Sequelize.INTEGER
+  credits: Sequelize.INTEGER,
+  userRanking: Sequelize.INTEGER
 });
 
 const Image = db.define("image", {
@@ -18,7 +19,8 @@ const View = db.define("view", {
   userId: Sequelize.INTEGER,
   username: Sequelize.STRING,
   userAge: Sequelize.INTEGER,
-  userGender: Sequelize.STRING
+  userGender: Sequelize.STRING,
+  userRanking: Sequelize.INTEGER
 })
 
 Image.belongsTo(User);
