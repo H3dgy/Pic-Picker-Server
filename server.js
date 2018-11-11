@@ -1,35 +1,18 @@
 const express = require("express");
 const db = require("./db");
 const app = express();
-const userModule = require("./modules/user");
-const imageModule = require("./modules/image");
-const viewModule = require("./modules/view")
-const { testImages, testUsers } = require("./testObjects");
+
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const router = require('./router');
 
 // Sequelize models
 
 const port = 3000;
 
-
-const seedUserCallback = async (req,res,next) => {
-  await Promise.all(testUsers.map(user => {
-    return userModule.addUser(user.username,user.password,user.settings);
-  }))
-  const result = await userModule.findAll();
-  res.send(result);
-}
-
-app.get('/SeedUsers', seedUserCallback);
-
-const seedPicturesCallBack = async (req,res,next) => {
-  await Promise.all(testImages.map(image => {
-    return imageModule.imageUpload(image.userId,image.uri)
-  }))
-  const result = await imageModule.findAll();
-  res.send(result);
-}
-
-app.get('/SeedImages', seedPicturesCallBack);
+app.use(cors());
+app.use(bodyParser.json());
+app.use(router);
 
 (async () => {
   try {
@@ -40,36 +23,3 @@ app.get('/SeedImages', seedPicturesCallBack);
     console.log(error);
   }
 })();
-
-const imageStreamCallBack = async (req,res,next) => {
-  const date = Date.parse("2018-11-10T11:45:45.491Z");
-  const result = await imageModule.imageStream(2, date, 1);
-  console.log(result);
-  res.send(result);
-}
-
-app.get('/Imagestream', imageStreamCallBack);
-
-const incrementImageCallBack = async (req,res,next) => {
-  await imageModule.incrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
-  await imageModule.incrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
-  await imageModule.decrementPriority('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
-  const result = await imageModule.findImage('https://res.cloudinary.com/diek0ztdy/image/upload/v1541795901/dickPicker/syodnbfp59llpxmug7lv.jpg');
-  console.log(result);
-  res.send(result);
-}
-
-app.get('/incrementImage', incrementImageCallBack);
-
-const _addView = async (req,res,next) => {
-  await viewModule.addView(1,"luke",60,50,1);
-  const result = await imageModule.viewImages();
-  res.send(result);
-}
-
-app.get('/addView', _addView);
-
-
-_seedUsers = () => {
-  return 
-}
