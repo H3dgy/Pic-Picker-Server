@@ -4,12 +4,13 @@ const viewModule = require("../modules/view");
 
 
 exports.imageUpload = async (req, res, next) => {
-  const { userId, uri, username,settings} = req.body;
+  const { id, uri, username,settings} = req.body;
   const {age,gender} = settings;
   try {
-    const image = await imageModule.imageUpload(userId, uri);
-    await viewModule.addView(userId,username,age,gender,true,image.id);
-    res.status(201).send(image);
+    const image = await imageModule.imageUpload(id, uri);
+    await viewModule.addView(id,username,age,gender,true,image.id);
+    const result = await imageModule.userImages(id);
+    res.status(201).send(result);
   } catch (error) {
     console.log(error);
     res.status(400).send();
@@ -37,7 +38,6 @@ exports.imageStream = async (req, res, next) => {
   let result;
   try {
     const queu1 = await imageModule.imageStream(userid, lastimageid, 1);
-    
     if (queu1.length < 5) {
       const queu2 = await imageModule.imageStream(userid, lastimageid, 2);
       result = queu1.concat(queu2).slice(0, 10);

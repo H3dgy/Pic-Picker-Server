@@ -1,7 +1,24 @@
 const userModule = require("../modules/user");
 
+exports.getUser = async (req,res,next) => {
+  console.log("getUser called: ", req.headers.username);
+  const {username} = req.headers;
+  try {
+    const result = await userModule.findUserByUsername(username);
+    console.log(result);
+    res.status(200).send(result);
+    
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
+  
+}
+
+
 exports.addUser = async (req,res,next) => {
   const {username,password,settings} = req.body;
+  console.log("add user request body: ", req.body)
   const control = await userModule.findUserByUsername(username);
   if(control) {
     res.status(600).send("username exists");
@@ -17,10 +34,10 @@ exports.addUser = async (req,res,next) => {
 };
 
 exports.updateSettings = async (req,res,next) => {
-  const {userId, settings} = req.body;
+  const {id, settings} = req.body;
   try {
-    await userModule.update(userId,{settings});
-    const result = await userModule.findUserById(userId);
+    await userModule.update(id,{settings});
+    const result = await userModule.findUserById(id);
     console.log(result);
     res.status(201).send(result);
   } catch (error) {
@@ -30,10 +47,9 @@ exports.updateSettings = async (req,res,next) => {
 };
 
 exports.incrementCredit = async (req,res,next) => {
-  const {userId} = req.body;
-  console.log("USERID: ", userId);
+  const {id} = req.body;
   try {
-    const result = await userModule.incrementCredit(userId);
+    const result = await userModule.incrementCredit(id);
     console.log(result);
     res.status(200).send(result[0][0][0]);
   } catch (error) {
@@ -43,10 +59,9 @@ exports.incrementCredit = async (req,res,next) => {
 };
 
 exports.decrementCredit = async (req,res,next) => {
-  const {userId} = req.body;
-  console.log("USERID: ", userId);
+  const {id} = req.body;
   try {
-    const result = await userModule.decrementCredit(userId);
+    const result = await userModule.decrementCredit(id);
     console.log(result);
     res.status(200).send(result[0][0][0]);
   } catch (error) {

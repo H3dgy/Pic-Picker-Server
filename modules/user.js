@@ -16,25 +16,25 @@ const addUser = (username, password, settings) => {
   });
 };
 
-const incrementCredit = (userId) => {
-  return User.increment('credits', {where: {id: userId}})
+const incrementCredit = (id) => {
+  return User.increment('credits', {where: {id: id}})
 }
 
-const decrementCredit = (userId) => {
-  return User.decrement('credits', {where: {id: userId}})
+const decrementCredit = (id) => {
+  return User.decrement('credits', {where: {id: id}})
 }
 
-const findUserById = (userId) => {
+const findUserById = (id) => {
   return User.findOne({
     where: {
-      id: userId
+      id: id
     }
   });
 }
 
-const update = (userId, obj) => {
+const update = (id, obj) => {
   return User.update(obj, {
-    where: {id: userId}
+    where: {id: id}
   })
 }
 
