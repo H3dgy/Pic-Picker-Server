@@ -17,11 +17,11 @@ router.post('/uploadImage', imageController.imageUpload);
 router.get('/userimages', imageController.userImages);
 router.post('/addView', viewController.addView);
 
-//router.get('/addView', testsController.addView);
-router.get('/incrementImage', testsController.incrementImageCallBack);
-router.get('/Imagestream', testsController.imageStreamCallBack);
-router.get('/SeedImages', testsController.seedPicturesCallBack);
-router.get('/SeedUsers', testsController.seedUserCallback);
+// //router.get('/addView', testsController.addView);
+// router.get('/incrementImage', testsController.incrementImageCallBack);
+// router.get('/Imagestream', testsController.imageStreamCallBack);
+// router.get('/SeedImages', testsController.seedPicturesCallBack);
+// router.get('/SeedUsers', testsController.seedUserCallback);
 router.get('/*', (req,res,next) => res.status(404).send(_404)); // Catchall for not found
 
 module.exports = router;

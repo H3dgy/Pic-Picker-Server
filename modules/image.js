@@ -79,8 +79,8 @@ const userImages = async userId => {
       userId: userId
     },
     include: [View],
-  }).map(el => el.get({plain: true}));
-  return result;
+  });
+  return result.map(el => el.get({plain: true}));
 };
 
 // Find images and return view
@@ -93,11 +93,12 @@ const viewImages = () => {
 
 // find image returns promise
 
-const findImage = imageId => {
-  return Image.findOne({
+const findImage = async imageId => {
+  const result = await Image.findOne({
     where: { id: imageId },
     include: [View]
   });
+  return result.get({plain: true});
 };
 
 // Find all images

@@ -16,12 +16,13 @@ exports.imageUpload = async (req, res, next) => {
   }
 };
 
+// Get the images for the user which he uploaded
+
 exports.userImages = async (req, res, next) => {
   const userId = req.headers.userid;
   try {
-    const queryresult = await imageModule.userImages(userId);
+    let queryresult = await imageModule.userImages(userId);
     const result = await Promise.all(queryresult.map(image => _updateDataImage(image)));
-
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
