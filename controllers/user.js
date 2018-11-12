@@ -5,7 +5,6 @@ exports.getUser = async (req,res,next) => {
   const {username} = req.headers;
   try {
     const result = await userModule.findUserByUsername(username);
-    console.log(result);
     res.status(200).send(result);
     
   } catch (error) {
@@ -38,7 +37,6 @@ exports.updateSettings = async (req,res,next) => {
   try {
     await userModule.update(id,{settings});
     const result = await userModule.findUserById(id);
-    console.log(result);
     res.status(201).send(result);
   } catch (error) {
     console.log(error);
@@ -50,7 +48,6 @@ exports.incrementCredit = async (req,res,next) => {
   const {id} = req.body;
   try {
     const result = await userModule.incrementCredit(id);
-    console.log(result);
     res.status(200).send(result[0][0][0]);
   } catch (error) {
     console.log(error);
@@ -62,7 +59,6 @@ exports.decrementCredit = async (req,res,next) => {
   const {id} = req.body;
   try {
     const result = await userModule.decrementCredit(id);
-    console.log(result);
     res.status(200).send(result[0][0][0]);
   } catch (error) {
     console.log(error);
