@@ -42,6 +42,7 @@ const connect = () => {
 const sync = () => {
   return connect().then(() => {
     console.log("Connection has been established successfully.");
+    //db.sync({force: true})
   });
 };
 

@@ -1,15 +1,15 @@
-const userModule = require("../modules/user");
+
 const imageModule = require("../modules/image");
 const viewModule = require("../modules/view");
-const { testImages, testUsers } = require("../testObjects");
+
 
 exports.imageUpload = async (req, res, next) => {
-  console.log(req.body);
-  const { userId, uri } = req.body;
+  const { userId, uri, username,settings} = req.body;
+  const {age,gender} = settings;
   try {
-    await imageModule.imageUpload(userId, uri);
-    const result = await imageModule.userImages(userId);
-    res.status(201).send(result[0]);
+    const image = await imageModule.imageUpload(userId, uri);
+    await viewModule.addView(userId,username,age,gender,true,image.id);
+    res.status(201).send(image);
   } catch (error) {
     console.log(error);
     res.status(400).send();
@@ -22,12 +22,33 @@ exports.userImages = async (req, res, next) => {
   const userId = req.headers.userid;
   try {
     let queryresult = await imageModule.userImages(userId);
-    const result = await Promise.all(queryresult.map(image => _updateDataImage(image)));
+    const result = await Promise.all(
+      queryresult.map(image => _updateDataImage(image))
+    );
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
     res.status(400).send();
   }
+};
+
+exports.imageStream = async (req, res, next) => {
+  const { lastimageid, userid } = req.headers;
+  let result;
+  try {
+    const queu1 = await imageModule.imageStream(userid, lastimageid, 1);
+    
+    if (queu1.length < 5) {
+      const queu2 = await imageModule.imageStream(userid, lastimageid, 2);
+      result = queu1.concat(queu2).slice(0, 10);
+    } else {
+      result = queu1.slice(0, 10);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
+  res.status(200).send(result);
 };
 
 // Use the views to generate the data object and update this in the database
@@ -42,18 +63,18 @@ _updateDataImage = async image => {
 
   // if any views were added since last time continue and add to the data
   if (count > people) {
-    console.log("doing")
     for (let index = 0; people < count; index++) {
       let view = views[index];
       const { userGender, userAge, isUpVote } = view;
       people++;
-      isUpVote ? score = score + 1 : score = - 1;
+      isUpVote ? (score = score + 1) : (score = -1);
       if (userGender === "both" || userGender === "male") {
         feedbackGender.male.upVotes = feedbackGender.male.upVotes + isUpVote;
         feedbackGender.male.people = feedbackGender.male.people + 1;
       }
       if (userGender === "both" || userGender === "female") {
-        feedbackGender.female.upVotes = feedbackGender.female.upVotes + isUpVote;
+        feedbackGender.female.upVotes =
+          feedbackGender.female.upVotes + isUpVote;
         feedbackGender.female.people = feedbackGender.female.people + 1;
       }
       if (userAge >= 18 && userAge < 25) {
@@ -75,8 +96,8 @@ _updateDataImage = async image => {
       people: people,
       feedbackGender: feedbackGender,
       feedbackAge: feedbackAge
-    }
-    await imageModule.imageUpdate({data: newData},image.id);
+    };
+    await imageModule.imageUpdate({ data: newData }, image.id);
     return await imageModule.findImage(image.id);
   } else {
     return image;

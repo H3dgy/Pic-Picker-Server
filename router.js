@@ -16,6 +16,7 @@ router.post('/decrementCredits', userController.incrementCredit);
 router.post('/uploadImage', imageController.imageUpload);
 router.get('/userimages', imageController.userImages);
 router.post('/addView', viewController.addView);
+router.get('/imagestream', imageController.imageStream);
 
 // //router.get('/addView', testsController.addView);
 // router.get('/incrementImage', testsController.incrementImageCallBack);

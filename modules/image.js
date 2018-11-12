@@ -26,13 +26,14 @@ const initialData = {
 // Upload an image for a user
 // Returns a promise
 
-const imageUpload = (userId, uri) => {
-  return Image.create({
+const imageUpload = async (userId, uri) => {
+  const image = await Image.create({
     uri: uri,
     priority: 1,
     userId: userId,
     data: initialData
   });
+  return image.get({plain: true})
 };
 
 const imageUpdate = (obj,imageId) => {
@@ -46,11 +47,11 @@ const imageUpdate = (obj,imageId) => {
 // ensure lastDate is the right date object
 // Higher up the lastDate needs to be send to the client of the new object
 
-const imageStream = (userId, lastDate, priority) => {
-  return Image.findAll({
+const imageStream = async (userId, lastImageId, priority) => {
+  const result = await Image.findAll({
     where: {
-      createdAt: {
-        [Op.gt]: lastDate
+      id: {
+        [Op.gt]: lastImageId,
       },
       priority: priority,
       userId: {
@@ -67,7 +68,8 @@ const imageStream = (userId, lastDate, priority) => {
         }
       }
     ]
-  });
+  })
+  return result.map(el => el.get({plain: true}));
 };
 
 // Find all images from user
@@ -103,8 +105,11 @@ const findImage = async imageId => {
 
 // Find all images
 
-const findAll = () => {
-  return Image.findAll();
+const findAll = async () => {
+  const result = await Image.findAll({
+    include: [View]
+  });
+  return result.map(el => el.get({plain: true}));
 };
 
 // Increment / decrement priority
@@ -112,6 +117,8 @@ const findAll = () => {
 const incrementPriority = imageId => {
   return Image.increment("priority", { where: { id: imageId} });
 };
+
+// Decrement priority
 
 const decrementPriority = imageId => {
   return Image.decrement("priority", { where: { id: imageId} });

@@ -6,8 +6,6 @@ exports.addView = async (req,res,next) => {
   const {age,gender} = settings;
   try {
     const image = await imageModule.findImage(imageId);
-    console.log('image: ', image.views);
-    console.log('view length: ', image.views.length);
     if(image.priority === 1 && image.views.length === 9) {
       await imageModule.incrementPriority(imageId);
     }
