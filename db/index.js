@@ -20,7 +20,8 @@ const View = db.define("view", {
   username: Sequelize.STRING,
   userAge: Sequelize.INTEGER,
   userGender: Sequelize.STRING,
-  userRanking: Sequelize.INTEGER
+  userRanking: Sequelize.INTEGER,
+  isUpVote: Sequelize.BOOLEAN,
 })
 
 Image.belongsTo(User);

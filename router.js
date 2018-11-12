@@ -8,7 +8,16 @@ const imageController = require('./controllers/image');
 
 let _404 = "the requested link was not found on the server"
 
-router.get('/addView', testsController.addView);
+router.post('/adduser', userController.addUser);
+router.post('/updatesettings', userController.updateSettings);
+router.post('/incrementCredits', userController.incrementCredit);
+router.post('/decrementCredits', userController.incrementCredit);
+
+router.post('/uploadImage', imageController.imageUpload);
+router.get('/userimages', imageController.userImages);
+router.post('/addView', viewController.addView);
+
+//router.get('/addView', testsController.addView);
 router.get('/incrementImage', testsController.incrementImageCallBack);
 router.get('/Imagestream', testsController.imageStreamCallBack);
 router.get('/SeedImages', testsController.seedPicturesCallBack);

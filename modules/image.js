@@ -7,14 +7,37 @@ const Op = db.sequelize.Op;
 const Image = db.models.Image;
 const View = db.models.View;
 
+const initialData = {
+  score: 5,
+  people: 0,
+  feedbackGender: {
+    male: {
+      upVotes: 0,
+      people: 0
+    },
+    female: {
+      upVotes: 0,
+      people: 0
+    }
+  },
+  feedbackAge: [{upVotes:0, people:0}, {upVotes:0, people:0}, {upVotes:0, people:0}, {upVotes:0, people:0}]
+};
+
 // Upload an image for a user
 // Returns a promise
-// works
+
 const imageUpload = (userId, uri) => {
   return Image.create({
     uri: uri,
     priority: 1,
-    userId: userId
+    userId: userId,
+    data: initialData
+  });
+};
+
+const imageUpdate = (obj,imageId) => {
+  return Image.update(obj, {
+    where: { id: imageId }
   });
 };
 
@@ -22,7 +45,6 @@ const imageUpload = (userId, uri) => {
 // lastDate specifies which the last update picture is that he has seen to not see same picture twice
 // ensure lastDate is the right date object
 // Higher up the lastDate needs to be send to the client of the new object
-// Works
 
 const imageStream = (userId, lastDate, priority) => {
   return Image.findAll({
@@ -34,63 +56,70 @@ const imageStream = (userId, lastDate, priority) => {
       userId: {
         [Op.not]: userId
       }
-    }, 
-    include: [ {
-      model: View,
-      where: {
-          userId:{
-          [Op.not]: userId
-          } 
+    },
+    include: [
+      {
+        model: View,
+        where: {
+          userId: {
+            [Op.not]: userId
+          }
+        }
       }
-    } ]
+    ]
   });
 };
 
-// Find all images from user 
+// Find all images from user
 // returns promise
-// Works
-const userImages = (userId) => {
-  return Image.findAll({
+
+const userImages = async userId => {
+  const result = await Image.findAll({
     where: {
       userId: userId
-    }
-  })
-}
+    },
+    include: [View],
+  }).map(el => el.get({plain: true}));
+  return result;
+};
 
 // Find images and return view
-// Works
+
 const viewImages = () => {
   return Image.findAll({
-    include: [ View ]
+    include: [View]
   });
-}
+};
 
 // find image returns promise
-// Works
-const findImage = uri => {
-  return Image.findOne({ where: { uri: uri } });
+
+const findImage = imageId => {
+  return Image.findOne({
+    where: { id: imageId },
+    include: [View]
+  });
 };
 
 // Find all images
-// Works
+
 const findAll = () => {
   return Image.findAll();
-}
+};
 
 // Increment / decrement priority
-// Works
-const incrementPriority = (uri) => {
-  return Image.increment('priority', {where: {uri: uri}})
-}
 
-// Works
-const decrementPriority = (uri) => {
-  return Image.decrement('priority', {where: {uri: uri}})
-}
+const incrementPriority = imageId => {
+  return Image.increment("priority", { where: { id: imageId} });
+};
+
+const decrementPriority = imageId => {
+  return Image.decrement("priority", { where: { id: imageId} });
+};
 
 module.exports = {
   imageUpload,
   findImage,
+  imageUpdate,
   imageStream,
   userImages,
   findAll,

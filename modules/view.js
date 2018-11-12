@@ -1,14 +1,14 @@
 const db = require("../db");
 const View = db.models.View;
 
-const addView = (userId, username, userAge, userGender, uri) => {
+const addView = (userId, username, userAge, userGender,isUpVote, imageId) => {
   return View.create({
     userId: userId,
     username: username,
     userAge: userAge,
     userGender: userGender,
-    userRanking: 10,
-    imageId: uri
+    imageId: imageId,
+    isUpVote: isUpVote
   })
 }
 
