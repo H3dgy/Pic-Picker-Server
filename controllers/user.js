@@ -45,6 +45,7 @@ exports.updateSettings = async (req,res,next) => {
 };
 
 exports.incrementCredit = async (req,res,next) => {
+  console.log('hey');
   const {id} = req.body;
   try {
     const result = await userModule.incrementCredit(id);

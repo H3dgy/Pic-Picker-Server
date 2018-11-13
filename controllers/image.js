@@ -71,24 +71,30 @@ _updateDataImage = async image => {
       if (userGender === "both" || userGender === "male") {
         feedbackGender.male.upVotes = feedbackGender.male.upVotes + isUpVote;
         feedbackGender.male.people = feedbackGender.male.people + 1;
+        feedbackGender.male.summary = feedbackGender.male.upVotes / feedbackGender.male.people;
       }
       if (userGender === "both" || userGender === "female") {
         feedbackGender.female.upVotes =
           feedbackGender.female.upVotes + isUpVote;
         feedbackGender.female.people = feedbackGender.female.people + 1;
+        feedbackGender.female.summary = feedbackGender.female.upVotes / feedbackGender.female.people;
       }
       if (userAge >= 18 && userAge < 25) {
         feedbackAge[0].upVotes = feedbackAge[0].upVotes + isUpVote;
         feedbackAge[0].people = feedbackAge[0].people + 1;
+        feedbackAge[0].summary = feedbackAge[0].upVotes / feedbackAge[0].people;
       } else if (userAge >= 25 && userAge < 35) {
         feedbackAge[1].upVotes = feedbackAge[1].upVotes + isUpVote;
         feedbackAge[1].people = feedbackAge[1].people + 1;
+        feedbackAge[1].summary = feedbackAge[1].upVotes / feedbackAge[1].people;
       } else if (userAge >= 35 && userAge < 45) {
         feedbackAge[2].upVotes = feedbackAge[2].upVotes + isUpVote;
         feedbackAge[2].people = feedbackAge[2].people + 1;
+        feedbackAge[2].summary = feedbackAge[2].upVotes / feedbackAge[2].people;
       } else if (userAge >= 45) {
         feedbackAge[3].upVotes = feedbackAge[3].upVotes + isUpVote;
         feedbackAge[3].people = feedbackAge[3].people + 1;
+        feedbackAge[3].summary = feedbackAge[3].upVotes / feedbackAge[3].people;
       }
     } // For
     const newData = {

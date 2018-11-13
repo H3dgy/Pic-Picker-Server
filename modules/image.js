@@ -13,14 +13,16 @@ const initialData = {
   feedbackGender: {
     male: {
       upVotes: 0,
-      people: 0
+      people: 0,
+      summary: 0
     },
     female: {
       upVotes: 0,
-      people: 0
+      people: 0,
+      summary: 0
     }
   },
-  feedbackAge: [{upVotes:0, people:0}, {upVotes:0, people:0}, {upVotes:0, people:0}, {upVotes:0, people:0}]
+  feedbackAge: [{upVotes:0, people:0, summary:0}, {upVotes:0, people:0, summary:0}, {upVotes:0, people:0, summary:0}, {upVotes:0, people:0, summary:0}]
 };
 
 // Upload an image for a user
