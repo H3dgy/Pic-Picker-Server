@@ -10,7 +10,7 @@ exports.addView = async (req,res,next) => {
       await imageModule.incrementPriority(imageId);
     }
     await viewModule.addView(userId,username,age,gender,isUpVote,imageId);
-    const result = await imageModule.viewImages();
+    const result = await imageModule.findImage(imageId);
     res.status(200).send(result);
   } catch (error) {
     console.log(error);

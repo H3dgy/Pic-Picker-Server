@@ -1,12 +1,6 @@
 const db = require("../db");
-
-// Functionality coupled to images: Create Image, Vote on Image (View)
-
-// Sequelize models
 const User = db.models.User;
 
-// Upload an image for a user
-// Returns a promise
 const addUser = (username, password, settings) => {
   return User.create({
     username: username,
@@ -16,39 +10,40 @@ const addUser = (username, password, settings) => {
   });
 };
 
-const incrementCredit = (id) => {
-  return User.increment('credits', {where: {id: id}})
-}
+const incrementCredit = id => {
+  return User.increment("credits", { where: { id: id } });
+};
 
-const decrementCredit = (id) => {
-  return User.decrement('credits', {where: {id: id}})
-}
+const decrementCredit = id => {
+  console.log("heeey");
+  return User.decrement("credits", { where: { id: id } });
+};
 
-const findUserById = (id) => {
+const findUserById = id => {
   return User.findOne({
     where: {
       id: id
     }
   });
-}
+};
 
 const update = (id, obj) => {
   return User.update(obj, {
-    where: {id: id}
-  })
-}
+    where: { id: id }
+  });
+};
 
-const findUserByUsername = (username) => {
+const findUserByUsername = username => {
   return User.findOne({
     where: {
       username: username
     }
-  })
-}
+  });
+};
 
 const findAll = () => {
-  return User.findAll()
-}
+  return User.findAll();
+};
 
 module.exports = {
   incrementCredit,
