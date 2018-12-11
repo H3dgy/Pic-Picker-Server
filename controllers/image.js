@@ -75,7 +75,6 @@ _updateDataImage = async image => {
   for (let index = 0; index < count; index++) {
     let view = views[index];
     const { userGender, userAge, isUpVote } = view;
-    console.log("view: ", userAge, userGender, isUpVote);
     isUpVote ? score++ : score--;
     if (userGender === "both" || userGender === "male") {
       feedbackGender.male.upVotes = feedbackGender.male.upVotes + isUpVote;
@@ -102,7 +101,6 @@ _updateDataImage = async image => {
       feedbackAge[2].people = feedbackAge[2].people + 1;
       feedbackAge[2].summary = feedbackAge[2].upVotes / feedbackAge[2].people;
     } else if (userAge >= 45) {
-      console.log("user age above 45");
       feedbackAge[3].upVotes = feedbackAge[3].upVotes + isUpVote;
       feedbackAge[3].people = feedbackAge[3].people + 1;
       feedbackAge[3].summary = feedbackAge[3].upVotes / feedbackAge[3].people;
@@ -116,6 +114,5 @@ _updateDataImage = async image => {
   };
   await imageModule.imageUpdate({ data: newData }, image.id);
   const result = await imageModule.findImage(image.id);
-  console.log(result);
   return result;
 };

@@ -15,7 +15,6 @@ const incrementCredit = id => {
 };
 
 const decrementCredit = id => {
-  console.log("heeey");
   return User.decrement("credits", { where: { id: id } });
 };
 
