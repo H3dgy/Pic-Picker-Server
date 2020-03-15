@@ -15,23 +15,82 @@ const User = db.define("user", {
   password: Sequelize.STRING,
   settings: Sequelize.JSON,
   credits: Sequelize.INTEGER,
-  userRanking: Sequelize.INTEGER
-});
+  userRanking: {
+    type: Sequelize.INTEGER,
+    field: 'user_ranking'
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    field: 'updated_at'
+  }},
+  {
+    timestamps: true
+  }
+);
 
 const Image = db.define("image", {
+  userId: {
+    type: Sequelize.UUID,
+    field: 'user_id'
+  },
   uri: Sequelize.STRING,
   data: Sequelize.JSON,
-  priority: Sequelize.INTEGER
-});
+  priority: Sequelize.INTEGER,
+  createdAt: {
+    type: Sequelize.DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    field: 'updated_at'
+  }},
+  {
+    timestamps: true
+  }
+);
 
 const View = db.define("view", {
-  userId: Sequelize.INTEGER,
+  userId: {
+    type: Sequelize.UUID,
+    field: 'user_id'
+  },
+  imageId: {
+    type: Sequelize.UUID,
+    field: 'image_id'
+  },
   username: Sequelize.STRING,
-  userAge: Sequelize.INTEGER,
-  userGender: Sequelize.STRING,
-  userRanking: Sequelize.INTEGER,
-  isUpVote: Sequelize.BOOLEAN
-});
+  userAge: {
+    type: Sequelize.INTEGER,
+    field: 'user_age'
+  },
+  userGender: {
+    type: Sequelize.STRING,
+    field: 'user_gender'
+  },
+  userRanking: {
+    type: Sequelize.INTEGER,
+    field: 'user_ranking'
+  },
+  isUpVote: {
+    type: Sequelize.BOOLEAN,
+    field: 'is_up_vote'
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    field: 'updated_at'
+  }},
+  {
+    timestamps: true
+  }
+);
 
 Image.belongsTo(User);
 User.hasMany(Image);

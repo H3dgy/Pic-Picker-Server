@@ -46,7 +46,7 @@ const imageStream = async (userId, lastImageId, priority) => {
   const result = await Image.findAll({
     where: {
       id: {
-        [Op.gt]: lastImageId
+        [Op.ne]: null
       },
       priority: priority,
       userId: {
